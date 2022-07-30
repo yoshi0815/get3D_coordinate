@@ -41,11 +41,6 @@ class depth_estimater:
             #print(depth_image.shape[0])
         except CvBridgeError as e:
             rospy.logerr(e)
-        """
-        color_image.flags.writeable = True
-        color_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
-        h, w, c = color_image.shape
-        """
 
         textx = int(text[4].x)
         texty = int(text[4].y)
@@ -80,33 +75,6 @@ class depth_estimater:
         cv2.waitKey(10)
         """
         ### =======================
-"""
-def callback(msg):
-    text = [bodyPart.pixel for person in msg.persons for bodyPart in person.bodyParts]
-    print(text[2].x)
-
-    #rospy.loginfo('%s\n' % text)
-def callbacktest(sub_pose, sub_depth):
-    print("as")
-
-def main():
-    rospy.init_node('echo', anonymous=False)
-    #de = depth_estimater()
-
-    queue_size = 100
-    fps = 100.
-    delay = 0.5#1 / fps * 0.5
-
-    # read the parameter from ROS parameter server
-    frame_topic = rospy.get_param('~pub_topic')
-    #sub_rgb = message_filters.Subscriber("/camera/color/image_raw",Image)
-    sub_depth = message_filters.Subscriber("/camera/aligned_depth_to_color/image_raw",Image)
-    sub_pose = message_filters.Subscriber(frame_topic,Frame)
-    #rospy.Subscriber(frame_topic, Frame, callback)
-    mf = message_filters.ApproximateTimeSynchronizer([sub_pose, sub_depth], queue_size, delay)
-    mf.registerCallback(callbacktest)
-    rospy.spin()
-"""
 
 if __name__ == '__main__':
     #main()
