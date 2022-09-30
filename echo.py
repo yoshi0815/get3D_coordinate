@@ -38,40 +38,42 @@ class depth_estimater:
             text = [bodyPart.pixel for person in pose_data.persons for bodyPart in person.bodyParts]
         except CvBridgeError as e:
             rospy.logerr(e)
+        try:
+            textx = int(text[4].x)
+            texty = int(text[4].y)
+            #print(textx, texty) print pixel(x, y)
+            sum = 0.0
 
-        textx = int(text[4].x)
-        texty = int(text[4].y)
-        #print(textx, texty) print pixel(x, y)
-        sum = 0.0
+            if (textx != 0) and (texty != 0): 
+                sum += depth_image.item(texty, textx)
+            ave = sum*0.001
+            x3 = textx
+            y3 = texty
+            point = np.array([x3,y3,ave])
+            if ave==0 :
+                print("ERROR: cannot get data ! ")
+                return 
 
-        if (textx != 0) and (texty != 0): 
-            sum += depth_image.item(texty, textx)
-        ave = sum*0.001
-        x3 = textx
-        y3 = texty
-        point = np.array([x3,y3,ave])
-        if ave==0 :
-            print("ERROR: cannot get data ! ")
-            return 
+            xx=point[0]
+            yy=point[1]
+            zz=point[2]
 
-        xx=point[0]
-        yy=point[1]
-        zz=point[2]
-        
-        xx =float((xx-334.005)/618.136)*zz #パラメータは各自のカメラで変えて下さい
-        yy =float((yy-231.885)/618.370)*zz #パラメータは各自のカメラで変えて下さい
-        xx = '{:.3f}'.format(xx)
-        yy = '{:.3f}'.format(yy)
+            xx =float((xx-334.005)/618.136)*zz #パラメータは各自のカメラで変えて下さい
+            yy =float((yy-231.885)/618.370)*zz #パラメータは各自のカメラで変えて下さい
+            xx = '{:.3f}'.format(xx)
+            yy = '{:.3f}'.format(yy)
 
-        print("point:",[xx,yy,zz])
+            print("point:",[xx,yy,zz])
 
-        ### ===== depth dubug =====
-        """
-        cv2.namedWindow("depth_image")
-        cv2.imshow("depth_image", depth_image)
-        cv2.waitKey(10)
-        """
-        ### =======================
+            ### ===== depth dubug =====
+            """
+            cv2.namedWindow("depth_image")
+            cv2.imshow("depth_image", depth_image)
+            cv2.waitKey(10)
+            """
+            ### =======================
+        except:
+            pass
 
 if __name__ == '__main__':
     try:
